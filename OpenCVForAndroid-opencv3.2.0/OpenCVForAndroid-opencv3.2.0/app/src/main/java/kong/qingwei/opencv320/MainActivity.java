@@ -64,89 +64,18 @@ public class MainActivity extends BaseActivity {
 
 //    public static int currentTabSelected;
 
-    public static String accValue = "";
-    public static String gyroValue = "";
-    public static String kalmanValue = "";
-    public static boolean newIMUValues;
-
-    public static String Qangle = "";
-    public static String Qbias = "";
-    public static String Rmeasure = "";
-    public static boolean newKalmanValues;
-
-    public static String pValue = "";
-    public static String iValue = "";
-    public static String dValue = "";
-    public static String targetAngleValue = "";
-    public static boolean newPIDValues;
-
-    public static boolean backToSpot;
-    public static int maxAngle = 8; // Eight is the default value
-    public static int maxTurning = 20; // Twenty is the default value
-
     public static String appVersion;
-    public static String firmwareVersion;
-    public static String eepromVersion;
-    public static String mcu;
-    public static boolean newInfo;
 
-    public static String batteryLevel;
-    public static double runtime;
-    public static boolean newStatus;
 
     public static boolean pairingWithDevice;
 
-//    public static boolean buttonState;
-//    public static boolean joystickReleased;
-
-    public final static String getPIDValues = "GP;";
-    public final static String getSettings = "GS;";
-    public final static String getInfo = "GI;";
-    public final static String getKalman = "GK;";
-
-//    public final static String setPValue = "SP,";
-//    public final static String setIValue = "SI,";
-//    public final static String setDValue = "SD,";
-//    public final static String setKalman = "SK,";
-//    public final static String setTargetAngle = "ST,";
-//    public final static String setMaxAngle = "SA,";
-//    public final static String setMaxTurning = "SU,";
-//    public final static String setBackToSpot = "SB,";
-
-    public final static String imuBegin = "IB;";
-    public final static String imuStop = "IS;";
-
-    public final static String statusBegin = "RB;";
-    public final static String statusStop = "RS;";
-
     public final static String sendStop = "CS;";
-    public final static String sendIMUValues = "CM,";
-    public final static String sendJoystickValues = "CJ,";
-    public final static String sendPairWithWii = "CPW;";
-    public final static String sendPairWithPS4 = "CPP;";
 
     // 追踪命令
     public final static String sendTrackedObject = "ST,";
     // 同步命令
     public final static String sendMatSize = "SM,";
 
-    public final static String restoreDefaultValues = "CR;";
-
-    public final static String responsePIDValues = "P";
-    public final static String responseKalmanValues = "K";
-    public final static String responseSettings = "S";
-    public final static String responseInfo = "I";
-    public final static String responseIMU = "V";
-    public final static String responseStatus = "R";
-    public final static String responsePairConfirmation = "PC";
-
-    public final static int responsePIDValuesLength = 5;
-    public final static int responseKalmanValuesLength = 4;
-    public final static int responseSettingsLength = 4;
-    public final static int responseInfoLength = 4;
-    public final static int responseIMULength = 4;
-    public final static int responseStatusLength = 3;
-    public final static int responsePairConfirmationLength = 1;
 
 /******************************** 蓝牙相关以上 ***********************************/
 
@@ -285,6 +214,7 @@ public class MainActivity extends BaseActivity {
         super.onStart();    // 指向父类的引用
         if (D)
             Log.d(TAG, "++ ON START ++");
+
         // If BT is not on, request that it be enabled.
         // setupChat() will then be called during onActivityResult
         if (!mBluetoothAdapter.isEnabled()) {
@@ -297,22 +227,6 @@ public class MainActivity extends BaseActivity {
                 Log.d(TAG, "Set up BT");
             setupBTService(); // Otherwise, setup the chat session
         }
-
-
-        /*
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this); // Create SharedPreferences instance
-        String filterCoefficient = preferences.getString("filterCoefficient", null); // Read the stored value for filter coefficient
-        if (filterCoefficient != null) {
-            mSensorFusion.filter_coefficient = Float.parseFloat(filterCoefficient);
-            mSensorFusion.tempFilter_coefficient = mSensorFusion.filter_coefficient;
-        }
-        // Read the previous back to spot value
-        backToSpot = preferences.getBoolean("backToSpot", true); // Back to spot is true by default
-        // Read the previous max angle
-        maxAngle = preferences.getInt("maxAngle", 8); // Eight is the default value
-        // Read the previous max turning value
-        maxTurning = preferences.getInt("maxTurning", 20); // Twenty is the default value
-        */
     }
 
     @Override
@@ -321,21 +235,6 @@ public class MainActivity extends BaseActivity {
         super.onStop();
         if (D)
             Log.d(TAG, "-- ON STOP --");
-        /*
-        // unregister sensor listeners to prevent the activity from draining the
-        // device's battery.
-        // 关闭传感器监听，保护设备电源
-
-        mSensorFusion.unregisterListeners();
-
-        // Store the value for FILTER_COEFFICIENT and max angle at shutdown
-        Editor edit = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        edit.putString("filterCoefficient", Float.toString(mSensorFusion.filter_coefficient));
-        edit.putBoolean("backToSpot", backToSpot);
-        edit.putInt("maxAngle", maxAngle);
-        edit.putInt("maxTurning", maxTurning);
-        edit.commit();
-        */
     }
 
     @Override
@@ -359,7 +258,6 @@ public class MainActivity extends BaseActivity {
         super.onDestroy();
         if (D)
             Log.d(TAG, "--- ON DESTROY ---");
-//        mSensorFusion.unregisterListeners();
     }
 
     @Override
@@ -368,11 +266,10 @@ public class MainActivity extends BaseActivity {
         super.onPause();
         if (D)
             Log.d(TAG, "- ON PAUSE -");
-        // Unregister sensor listeners to prevent the activity from draining the device's battery.
-//        mSensorFusion.unregisterListeners();
+
         if (mChatService != null) { // Send stop command and stop sending graph data command
             if (mChatService.getState() == BluetoothChatService.STATE_CONNECTED)
-                mChatService.write(sendStop + imuStop + statusStop);
+                mChatService.write(sendStop);
         }
     }
 
@@ -382,8 +279,6 @@ public class MainActivity extends BaseActivity {
         super.onResume();
         if (D)
             Log.d(TAG, "+ ON RESUME +");
-        // Restore the sensor listeners when user resumes the application.
-//        mSensorFusion.initListeners();
     }
 
 /****************************** 菜单相关 *********************************/
@@ -425,13 +320,10 @@ public class MainActivity extends BaseActivity {
                 /* to be fix
                 dialogFragment.show(getSupportFragmentManager(), null);
                  */
-                // 设置界面
-//                dialogFragment.show(getSupportFragmentManager(), null);
-
                 return true;
             case android.R.id.home:
 //                Log.d(TAG, "onOptionsItemSelected: Here is for home.");
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://pengzhihui.xyz/"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/fgmn"));
                 startActivity(browserIntent);
                 return true;
             default:
@@ -449,7 +341,6 @@ public class MainActivity extends BaseActivity {
                 Log.d(TAG, "mChatService is not null.");
             return;
         }
-
 
         if (D)
             Log.d(TAG, "setupBTService()");
@@ -471,7 +362,7 @@ public class MainActivity extends BaseActivity {
 
 
     // The Handler class that gets information back from the BluetoothChatService
-    // 主活动信息处理器，处理蓝牙返回数据
+    // 主信息处理器，处理BluetoothChatService返回数据
     static class BluetoothHandler extends Handler
     {
         private final MainActivity mMainActivity;
@@ -490,74 +381,18 @@ public class MainActivity extends BaseActivity {
                     mMainActivity.supportInvalidateOptionsMenu();
                     if (D)
                         Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    // 解析第一个参数（蓝牙状态）
                     switch (msg.arg1) {
                         case BluetoothChatService.STATE_CONNECTED:
                             MainActivity.showToast(mMainActivity.getString(R.string.connected_to) + " " + mConnectedDeviceName, Toast.LENGTH_SHORT);
                             if (mChatService == null)
                                 return;
-                            Handler mHandler = new Handler();
-                            mHandler.postDelayed(new Runnable()
-                            {
-                                public void run()
-                                {
-                                    mChatService.write(getPIDValues + getSettings + getInfo + getKalman);
-                                }
-                            }, 1000); // Wait 1 second before sending the message
-
-                            /* 不考虑GraphFragment和ViewPagerAdapter
-                            if (GraphFragment.mToggleButton != null) {
-                                if (GraphFragment.mToggleButton.isChecked() && checkTab(ViewPagerAdapter.GRAPH_FRAGMENT)) {
-                                    mHandler.postDelayed(new Runnable()
-                                    {
-                                        public void run()
-                                        {
-                                            mChatService.write(imuBegin); // Request data
-                                        }
-                                    }, 1000); // Wait 1 second before sending the message
-                                } else {
-                                    mHandler.postDelayed(new Runnable()
-                                    {
-                                        public void run()
-                                        {
-                                            mChatService.write(imuStop); // Stop sending data
-                                        }
-                                    }, 1000); // Wait 1 second before sending the message
-                                }
-                            }
-                            if (checkTab(ViewPagerAdapter.INFO_FRAGMENT)) {
-                                mHandler.postDelayed(new Runnable()
-                                {
-                                    public void run()
-                                    {
-                                        mChatService.write(statusBegin); // Request data
-                                    }
-                                }, 1000); // Wait 1 second before sending the message
-                            }*/
-
                             break;
                         case BluetoothChatService.STATE_CONNECTING:
                             break;
                     }
-//                    PIDFragment.updateButton();
                     break;
                 case MESSAGE_READ:
-                    if (newPIDValues) {
-                        newPIDValues = false;
-//                        PIDFragment.updateView();
-                    }
-                    if (newInfo || newStatus) {
-                        newInfo = false;
-                        newStatus = false;
-//                        InfoFragment.updateView();
-                    }
-                    if (newIMUValues) {
-                        newIMUValues = false;
-//                        GraphFragment.updateIMUValues();
-                    }
-                    if (newKalmanValues) {
-                        newKalmanValues = false;
-//                        GraphFragment.updateKalmanValues();
-                    }
                     if (pairingWithDevice) {
                         pairingWithDevice = false;
                         MainActivity.showToast("Now enable discovery of your device", Toast.LENGTH_LONG);
@@ -570,7 +405,6 @@ public class MainActivity extends BaseActivity {
                     break;
                 case MESSAGE_DISCONNECTED:
                     mMainActivity.supportInvalidateOptionsMenu();
-//                    PIDFragment.updateButton();
                     if (msg.getData() != null)
                         MainActivity.showToast(msg.getData().getString(TOAST), Toast.LENGTH_SHORT);
                     break;

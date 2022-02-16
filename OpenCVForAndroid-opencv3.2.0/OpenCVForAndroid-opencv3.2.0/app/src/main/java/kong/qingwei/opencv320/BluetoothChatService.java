@@ -429,50 +429,7 @@ public class BluetoothChatService
                         for (int i = 0; i < splitMessage.length; i++)
                             splitMessage[i] = splitMessage[i].trim(); // Trim message
 
-                        if (splitMessage[0].equals(MainActivity.responsePIDValues) && splitMessage.length == MainActivity.responsePIDValuesLength) {
-                            MainActivity.pValue = splitMessage[1];
-                            MainActivity.iValue = splitMessage[2];
-                            MainActivity.dValue = splitMessage[3];
-                            MainActivity.targetAngleValue = splitMessage[4];
-                            MainActivity.newPIDValues = true;
-
-                            mHandler.obtainMessage(MainActivity.MESSAGE_READ).sendToTarget(); // Send message back to the UI Activity
-                        } else if (splitMessage[0].equals(MainActivity.responseSettings) && splitMessage.length == MainActivity.responseSettingsLength) {
-                            MainActivity.backToSpot = splitMessage[1].equals("1");
-                            MainActivity.maxAngle = Integer.parseInt(splitMessage[2]);
-                            MainActivity.maxTurning = Integer.parseInt(splitMessage[3]);
-                        } else if (splitMessage[0].equals(MainActivity.responseInfo) && splitMessage.length == MainActivity.responseInfoLength) {
-                            MainActivity.firmwareVersion = splitMessage[1];
-                            MainActivity.eepromVersion = splitMessage[2];
-                            MainActivity.mcu = splitMessage[3];
-                            MainActivity.newInfo = true;
-
-                            mHandler.obtainMessage(MainActivity.MESSAGE_READ).sendToTarget(); // Send message back to the UI Activity
-                        } else if (splitMessage[0].equals(MainActivity.responseStatus) && splitMessage.length == MainActivity.responseStatusLength) {
-                            MainActivity.batteryLevel = splitMessage[1];
-                            MainActivity.runtime = Double.parseDouble(splitMessage[2]);
-                            MainActivity.newStatus = true;
-
-                            mHandler.obtainMessage(MainActivity.MESSAGE_READ).sendToTarget(); // Send message back to the UI Activity
-                        } else if (splitMessage[0].equals(MainActivity.responseKalmanValues) && splitMessage.length == MainActivity.responseKalmanValuesLength) {
-                            MainActivity.Qangle = splitMessage[1];
-                            MainActivity.Qbias = splitMessage[2];
-                            MainActivity.Rmeasure = splitMessage[3];
-                            MainActivity.newKalmanValues = true;
-
-                            mHandler.obtainMessage(MainActivity.MESSAGE_READ).sendToTarget(); // Send message back to the UI Activity
-                        } else if (splitMessage[0].equals(MainActivity.responseIMU) && splitMessage.length == MainActivity.responseIMULength) {
-                            MainActivity.accValue = splitMessage[1];
-                            MainActivity.gyroValue = splitMessage[2];
-                            MainActivity.kalmanValue = splitMessage[3];
-                            MainActivity.newIMUValues = true;
-
-                            mHandler.obtainMessage(MainActivity.MESSAGE_READ).sendToTarget(); // Send message back to the UI Activity
-                        } else if (splitMessage[0].equals(MainActivity.responsePairConfirmation) && splitMessage.length == MainActivity.responsePairConfirmationLength) {
-                            MainActivity.pairingWithDevice = true;
-
-                            mHandler.obtainMessage(MainActivity.MESSAGE_READ).sendToTarget(); // Send message back to the UI Activity
-                        }
+                        /***************  解释器  **************/
                     }
                 } catch (IOException e) {
                     if (D)

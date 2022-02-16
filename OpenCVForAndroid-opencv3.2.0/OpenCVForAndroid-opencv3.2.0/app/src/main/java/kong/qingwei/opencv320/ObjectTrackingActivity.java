@@ -35,9 +35,13 @@ public class ObjectTrackingActivity extends BaseActivity {
     private Runnable mRunnable;
     private Handler mHandler = new Handler();
 
+    // 数据同步
     private boolean isSync = false;
-    private int matCols = 1280;
-    private int matRows = 720;
+    private final int matCols = 1280;
+    private final int matRows = 720;
+
+    // 是否开启云台追踪
+    private int isTracking = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,29 +96,7 @@ public class ObjectTrackingActivity extends BaseActivity {
             public void onObjectLocation(Point center) {
                 Log.i(TAG, "onObjectLocation: 目标位置 [" + center.x + ", " + center.y + "]");
 
-                /* 发送蓝牙指令
-                mRunnable = new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-
-                        mHandler.postDelayed(this, 150); // Send data every 150ms
-                        if (MainActivity.mChatService == null) {
-                            Log.d("unaughty", "mChatService is null.");
-                            return;
-                        }
-
-                        if (MainActivity.mChatService.getState() == BluetoothChatService.STATE_CONNECTED) {
-                                // 通过蓝牙发送命令
-                                String message = MainActivity.sendTrackedObject + center.x + ',' + center.y + ";";
-                                MainActivity.mChatService.write(message);
-                                Log.d("unaughty", "run: " + message);
-                        }
-                    }
-                };
-                */
-
+                // 延时
                 try {
                     TimeUnit.MILLISECONDS.sleep(200);
                 } catch (InterruptedException e) {
@@ -131,11 +113,16 @@ public class ObjectTrackingActivity extends BaseActivity {
                     String message;
                     if (!isSync) {
                         message = MainActivity.sendMatSize + matCols + ',' + matRows + ";";
+                        MainActivity.mChatService.write(message);
                         isSync = true;
                     }
-                    message = MainActivity.sendTrackedObject + center.x + ',' + center.y + ";";
-                    MainActivity.mChatService.write(message);
-                    Log.d("unaughty", "run: " + message);
+                    // 是否开启云台追踪
+                    if (isTracking != 0) {
+                        message = MainActivity.sendTrackedObject + center.x + ',' + center.y + ";";
+                        MainActivity.mChatService.write(message);
+                        Log.d("unaughty", "run: " + message);
+                    }
+
                 }
             }
 
@@ -161,5 +148,9 @@ public class ObjectTrackingActivity extends BaseActivity {
      */
     public void swapCamera(View view) {
         objectTrackingView.swapCamera();
+    }
+
+    public void startTracking(View view) {
+        isTracking = 1 - isTracking;
     }
 }

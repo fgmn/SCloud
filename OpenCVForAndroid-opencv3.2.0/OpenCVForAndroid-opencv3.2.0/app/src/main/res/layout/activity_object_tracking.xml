@@ -15,10 +15,20 @@
         android:onClick="swapCamera"
         android:text="切换摄像头" />
 
+    <Button
+        android:id="@+id/btn_isTracking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_swap_camera"
+        android:layout_marginTop="11dp"
+        android:onClick="startTracking"
+        android:text="云台跟踪" />
+
     <ImageView
         android:id="@+id/image_view"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_below="@id/btn_swap_camera" />
+        android:layout_below="@+id/btn_isTracking"
+        android:layout_marginTop="14dp" />
 
 </RelativeLayout>
