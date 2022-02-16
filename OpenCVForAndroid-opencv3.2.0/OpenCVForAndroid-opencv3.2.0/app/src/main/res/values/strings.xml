@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">OpenCV320</string>
+    <string name="connecting">Connecting&#8230;</string>
+    <string name="connected_to">Connected to:</string>
+    <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Leaving The application!</string>
+
+    <!--  DeviceListActivity -->
+    <string name="scanning">Scanning for devices&#8230;</string>
+    <string name="select_device">Select a device to connect</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="none_found">No devices found</string>
+    <string name="title_paired_devices">Paired Devices</string>
+    <string name="title_other_devices">Other Available Devices</string>
+    <string name="button_scan">Scan for devices</string>
+
+    <!-- Options Menu -->
+    <string name="connect">Connect</string>
+    <string name="settings">Settings</string>
+</resources>
