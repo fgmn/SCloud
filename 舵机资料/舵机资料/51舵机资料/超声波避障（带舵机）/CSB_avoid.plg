@@ -1,0 +1,35 @@
+<html>
+<body>
+<pre>
+<h1>礦ision3 Build Log</h1>
+<h2>Project:</h2>
+E:\亚博网盘资料\亚博51单片机智能小车光盘资料A\7、图文教程\2、智能小车传感器拓展实验\6、超声波避障（带舵机）\超声波避障（带舵机）\CSB_avoid.uv2
+Project File Date:  05/17/2017
+
+<h2>Output:</h2>
+创建目标 '目标 1'
+编译 main.c ...
+MAIN.C(117): 错误 C187: not an lvalue
+MAIN.C(117): 错误 C141: syntax error near '9'
+MAIN.C(117): 错误 C141: syntax error near '9999999999999999999999999999999999999999999999999'
+MAIN.C(118): 错误 C141: syntax error near '}'
+目标未产生
+创建目标 '目标 1'
+编译 main.c ...
+MAIN.C(533): 警告 C280: 'a': unreferenced local variable
+连接 ...
+Program Size: data=75.3 xdata=0 code=3113
+"CSB_avoid" - 0 个错误, 1 个警告。
+创建目标 '目标 1'
+编译 main.c ...
+MAIN.C(533): 警告 C280: 'a': unreferenced local variable
+连接 ...
+Program Size: data=75.3 xdata=0 code=3113
+创建 HEX 文件 "CSB_avoid" ...
+"CSB_avoid" - 0 个错误, 1 个警告。
+创建目标 '目标 1'
+编译 main.c ...
+连接 ...
+Program Size: data=73.3 xdata=0 code=3113
+创建 HEX 文件 "CSB_avoid" ...
+"CSB_avoid" - 0 个错误, 0 个警告。
